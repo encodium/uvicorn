@@ -72,7 +72,7 @@ setup(
     author="Tom Christie",
     author_email="tom@tomchristie.com",
     packages=get_packages("uvicorn"),
-    install_requires=minimal_requirements,
+    install_requires=minimal_requirements + extra_requirements,
     extras_require={"standard": extra_requirements},
     include_package_data=True,
     classifiers=[
