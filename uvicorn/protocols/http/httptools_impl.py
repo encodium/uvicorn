@@ -213,7 +213,6 @@ class HttpToolsProtocol(asyncio.Protocol):
     # Parser callbacks
     def on_message_begin(self):
         self.url = b""
-        method = self.parser.get_method()
         self.expect_100_continue = False
         self.headers = []
         self.scope = {
@@ -223,7 +222,6 @@ class HttpToolsProtocol(asyncio.Protocol):
             "server": self.server,
             "client": self.client,
             "scheme": self.scheme,
-            "method": method.decode("ascii"),
             "root_path": self.root_path,
             "headers": self.headers,
         }
@@ -250,6 +248,8 @@ class HttpToolsProtocol(asyncio.Protocol):
         path = raw_path.decode("ascii")
         if "%" in path:
             path = urllib.parse.unquote(path)
+        method = self.parser.get_method()
+        self.scope["method"] = method.decode("ascii")
         self.scope["path"] = path
         self.scope["raw_path"] = raw_path
         self.scope["query_string"] = parsed_url.query if parsed_url.query else b""
